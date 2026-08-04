@@ -1,164 +1,109 @@
 const chart = echarts.init(document.getElementById("chart"));
 
-const option = {
-    backgroundColor: "#0d1117",
+function buildSeries(subjects){
 
-    color: [
-        "#2196F3", // Physics
-        "#FF9800", // Chemistry
-        "#B57EDC", // Higher Math
-        "#FFFFFF", // Biology
-        "#1B5E20", // Bangla
-        "#F44336"  // English
-    ],
+    return subjects.map(subject=>({
 
-    tooltip: {
-        trigger: "axis"
-    },
+        name:subject.name,
 
-    legend: {
-        textStyle: {
-            color: "#ffffff"
-        }
-    },
+        type:"line",
 
-    grid: {
-        left: "5%",
-        right: "5%",
-        top: "8%",
-        bottom: "8%"
-    },
+        smooth:true,
 
-    xAxis: {
-        type: "category",
-        boundaryGap: false,
-        data: labels,
-        axisLine: {
-            lineStyle: {
-                color: "#444"
+        symbol:"none",
+
+        color:subject.color,
+
+        lineStyle:{
+            width:3
+        },
+
+        areaStyle:{
+            color:new echarts.graphic.LinearGradient(
+                0,0,0,1,
+                [
+                    {
+                        offset:0,
+                        color:subject.color+"66"
+                    },
+                    {
+                        offset:1,
+                        color:subject.color+"00"
+                    }
+                ]
+            )
+        },
+
+        data:subject.data
+
+    }));
+
+}
+
+function draw(view){
+
+    const current=datasets[view];
+
+    chart.setOption({
+
+        backgroundColor:"#0d1117",
+
+        tooltip:{
+            trigger:"axis"
+        },
+
+        legend:{
+            textStyle:{
+                color:"#fff"
             }
         },
-        axisLabel: {
-            color: "#aaa"
-        }
-    },
 
-    yAxis: {
-        type: "value",
-        min: 0,
-        max: 100,
-        axisLine: {
-            lineStyle: {
-                color: "#444"
-            }
-        },
-        splitLine: {
-            lineStyle: {
-                color: "#222"
-            }
-        },
-        axisLabel: {
-            color: "#aaa"
-        }
-    },
-
-    series: [
-
-        {
-            name: "Physics",
-            type: "line",
-            smooth: true,
-            symbol: "none",
-            lineStyle: { width: 3 },
-            areaStyle: {
-                color: new echarts.graphic.LinearGradient(0,0,0,1,[
-                    {offset:0,color:"rgba(33,150,243,0.35)"},
-                    {offset:1,color:"rgba(33,150,243,0)"}
-                ])
-            },
-            data: subjects[0].data
+        xAxis:{
+            type:"category",
+            boundaryGap:false,
+            data:current.labels,
+            axisLabel:{color:"#aaa"},
+            axisLine:{lineStyle:{color:"#444"}}
         },
 
-        {
-            name: "Chemistry",
-            type: "line",
-            smooth: true,
-            symbol: "none",
-            lineStyle: { width: 3 },
-            areaStyle: {
-                color: new echarts.graphic.LinearGradient(0,0,0,1,[
-                    {offset:0,color:"rgba(255,152,0,0.35)"},
-                    {offset:1,color:"rgba(255,152,0,0)"}
-                ])
-            },
-            data: subjects[1].data
+        yAxis:{
+            type:"value",
+            min:0,
+            max:100,
+            axisLabel:{color:"#aaa"},
+            axisLine:{lineStyle:{color:"#444"}},
+            splitLine:{lineStyle:{color:"#222"}}
         },
 
-        {
-            name: "Higher Math",
-            type: "line",
-            smooth: true,
-            symbol: "none",
-            lineStyle: { width: 3 },
-            areaStyle: {
-                color: new echarts.graphic.LinearGradient(0,0,0,1,[
-                    {offset:0,color:"rgba(181,126,220,0.35)"},
-                    {offset:1,color:"rgba(181,126,220,0)"}
-                ])
-            },
-            data: subjects[2].data
+        grid:{
+            left:"5%",
+            right:"5%",
+            top:"8%",
+            bottom:"8%"
         },
 
-        {
-            name: "Biology",
-            type: "line",
-            smooth: true,
-            symbol: "none",
-            lineStyle: { width: 3 },
-            areaStyle: {
-                color: new echarts.graphic.LinearGradient(0,0,0,1,[
-                    {offset:0,color:"rgba(255,255,255,0.35)"},
-                    {offset:1,color:"rgba(255,255,255,0)"}
-                ])
-            },
-            data: subjects[3].data
-        },
+        series:buildSeries(current.subjects)
 
-        {
-            name: "Bangla",
-            type: "line",
-            smooth: true,
-            symbol: "none",
-            lineStyle: { width: 3 },
-            areaStyle: {
-                color: new echarts.graphic.LinearGradient(0,0,0,1,[
-                    {offset:0,color:"rgba(27,94,32,0.35)"},
-                    {offset:1,color:"rgba(27,94,32,0)"}
-                ])
-            },
-            data: subjects[4].data
-        },
+    });
 
-        {
-            name: "English",
-            type: "line",
-            smooth: true,
-            symbol: "none",
-            lineStyle: { width: 3 },
-            areaStyle: {
-                color: new echarts.graphic.LinearGradient(0,0,0,1,[
-                    {offset:0,color:"rgba(244,67,54,0.35)"},
-                    {offset:1,color:"rgba(244,67,54,0)"}
-                ])
-            },
-            data: subjects[5].data
-        }
+}
 
-    ]
-};
+draw("day");
 
-chart.setOption(option);
+const buttons=document.querySelectorAll(".time-selector button");
 
-window.addEventListener("resize", function () {
-    chart.resize();
+buttons.forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+        buttons.forEach(b=>b.classList.remove("active"));
+
+        button.classList.add("active");
+
+        draw(button.innerText.toLowerCase());
+
+    });
+
 });
+
+window.addEventListener("resize",()=>chart.resize());
