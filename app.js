@@ -1,10 +1,19 @@
 const chart = echarts.init(document.getElementById("chart"));
 
-function buildSeries(subjects){
+const SUBJECTS = [
+    "Physics",
+    "Chemistry",
+    "HigherMath",
+    "Biology",
+    "Bangla",
+    "English"
+];
 
-    return subjects.map(subject=>({
+function buildSeries(labels, values){
 
-        name:subject.name,
+    return SUBJECTS.map(subject=>({
+
+        name:subject==="HigherMath" ? "Higher Math" : subject,
 
         type:"line",
 
@@ -12,7 +21,7 @@ function buildSeries(subjects){
 
         symbol:"none",
 
-        color:subject.color,
+        color:subjectColors[subject],
 
         lineStyle:{
             width:3
@@ -24,17 +33,17 @@ function buildSeries(subjects){
                 [
                     {
                         offset:0,
-                        color:subject.color+"66"
+                        color:subjectColors[subject]+"66"
                     },
                     {
                         offset:1,
-                        color:subject.color+"00"
+                        color:subjectColors[subject]+"00"
                     }
                 ]
             )
         },
 
-        data:subject.data
+        data:values[subject]
 
     }));
 
@@ -42,7 +51,94 @@ function buildSeries(subjects){
 
 function draw(view){
 
-    const current=datasets[view];
+    let labels=[];
+    let values={};
+
+    SUBJECTS.forEach(s=>values[s]=[]);
+
+    if(view==="day"){
+
+        const today="2026-08-04";
+
+        const todayData=studyHistory.filter(r=>r.time.startsWith(today));
+
+        todayData.forEach(record=>{
+
+            labels.push(record.time.split(" ")[1]);
+
+            SUBJECTS.forEach(subject=>{
+
+                values[subject].push(record[subject]);
+
+            });
+
+        });
+
+    }
+
+    else{
+
+        const grouped={};
+
+        studyHistory.forEach(record=>{
+
+            let key;
+
+            const date=new Date(record.time);
+
+            if(view==="week"){
+
+                key=record.time.substring(0,10);
+
+            }
+
+            else if(view==="month"){
+
+                key=record.time.substring(0,10);
+
+            }
+
+            else{
+
+                key=date.toLocaleString("default",{month:"short"});
+
+            }
+
+            if(!grouped[key]){
+
+                grouped[key]={};
+
+                SUBJECTS.forEach(s=>grouped[key][s]=0);
+
+            }
+
+            SUBJECTS.forEach(subject=>{
+
+                grouped[key][subject]=Math.max(
+
+                    grouped[key][subject],
+
+                    record[subject]
+
+                );
+
+            });
+
+        });
+
+        labels=Object.keys(grouped);
+
+        labels.forEach(label=>{
+
+            SUBJECTS.forEach(subject=>{
+
+                values[subject].push(grouped[label][subject]);
+
+            });
+
+        });
+
+    }
 
     chart.setOption({
 
@@ -58,23 +154,6 @@ function draw(view){
             }
         },
 
-        xAxis:{
-            type:"category",
-            boundaryGap:false,
-            data:current.labels,
-            axisLabel:{color:"#aaa"},
-            axisLine:{lineStyle:{color:"#444"}}
-        },
-
-        yAxis:{
-            type:"value",
-            min:0,
-            max:100,
-            axisLabel:{color:"#aaa"},
-            axisLine:{lineStyle:{color:"#444"}},
-            splitLine:{lineStyle:{color:"#222"}}
-        },
-
         grid:{
             left:"5%",
             right:"5%",
@@ -82,7 +161,40 @@ function draw(view){
             bottom:"8%"
         },
 
-        series:buildSeries(current.subjects)
+        xAxis:{
+            type:"category",
+            boundaryGap:false,
+            data:labels,
+            axisLabel:{
+                color:"#aaa"
+            },
+            axisLine:{
+                lineStyle:{
+                    color:"#444"
+                }
+            }
+        },
+
+        yAxis:{
+            type:"value",
+            min:0,
+            max:100,
+            axisLabel:{
+                color:"#aaa"
+            },
+            axisLine:{
+                lineStyle:{
+                    color:"#444"
+                }
+            },
+            splitLine:{
+                lineStyle:{
+                    color:"#222"
+                }
+            }
+        },
+
+        series:buildSeries(labels,values)
 
     });
 
@@ -100,7 +212,7 @@ buttons.forEach(button=>{
 
         button.classList.add("active");
 
-        draw(button.innerText.toLowerCase());
+        draw(button.textContent.trim().toLowerCase());
 
     });
 
