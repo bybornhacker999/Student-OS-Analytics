@@ -276,3 +276,26 @@ buttons.forEach(button=>{
 });
 
 window.addEventListener("resize",()=>chart.resize());
+
+const subjectButton = document.getElementById("subjectButton");
+const subjectMenu = document.getElementById("subjectMenu");
+
+subjectButton.addEventListener("click", (e) => {
+
+    e.stopPropagation();
+
+    subjectMenu.classList.toggle("show");
+
+});
+
+document.addEventListener("click", () => {
+
+    subjectMenu.classList.remove("show");
+
+});
+
+subjectMenu.addEventListener("click", (e) => {
+
+    e.stopPropagation();
+
+});
