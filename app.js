@@ -58,7 +58,7 @@ function draw(view){
 
     if(view==="day"){
 
-        const today="2026-08-04";
+        cconst today = new Date().toISOString().split("T")[0];
 
         const todayData=studyHistory.filter(r=>r.time.startsWith(today));
 
