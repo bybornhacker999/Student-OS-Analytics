@@ -76,16 +76,125 @@ function draw(view){
 
     }
 
+   else{
+
+    const now = new Date();
+
+    let filtered = [];
+
+    if(view==="week"){
+
+        const start = new Date(now);
+
+        const day = start.getDay();
+
+        const distance = (day===6)?0:(day+1);
+
+        start.setDate(start.getDate()-distance);
+
+        filtered = studyHistory.filter(record=>{
+
+            const d = new Date(record.time);
+
+            return d>=start && d<=now;
+
+        });
+
+    }
+
+    else if(view==="month"){
+
+        const start = new Date(now);
+
+        start.setDate(start.getDate()-29);
+
+        filtered = studyHistory.filter(record=>{
+
+            const d=new Date(record.time);
+
+            return d>=start && d<=now;
+
+        });
+
+    }
+
     else{
 
-        const grouped={};
+        const start = new Date(now.getFullYear(),0,1);
 
-        studyHistory.forEach(record=>{
+        filtered = studyHistory.filter(record=>{
 
-            let key;
+            const d=new Date(record.time);
 
-            const date=new Date(record.time);
+            return d>=start && d<=now;
 
+        });
+
+    }
+
+    const grouped={};
+
+    filtered.forEach(record=>{
+
+        const d=new Date(record.time);
+
+        let key;
+
+        if(view==="year"){
+
+            key=d.toLocaleString("default",{month:"short"});
+
+        }
+
+        else{
+
+            key=record.time.substring(5,10);
+
+        }
+
+        if(!grouped[key]){
+
+            grouped[key]={};
+
+            SUBJECTS.forEach(subject=>{
+
+                grouped[key][subject]=0;
+
+            });
+
+        }
+
+        SUBJECTS.forEach(subject=>{
+
+            grouped[key][subject]=Math.max(
+
+                grouped[key][subject],
+
+                record[subject]
+
+            );
+
+        });
+
+    });
+
+    labels=Object.keys(grouped);
+
+    labels.forEach(label=>{
+
+        SUBJECTS.forEach(subject=>{
+
+            values[subject].push(
+
+                grouped[label][subject]
+
+            );
+
+        });
+
+    });
+
+}
             if(view==="week"){
 
                 key=record.time.substring(0,10);
