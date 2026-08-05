@@ -82,3 +82,101 @@ body{
     height:650px;
 
 }
+
+.controls{
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+
+}
+
+.subject-dropdown{
+
+    position:relative;
+
+}
+
+#subjectButton{
+
+    background:#1b2430;
+
+    color:white;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:10px 18px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+}
+
+.subject-menu{
+
+    position:absolute;
+
+    top:55px;
+
+    right:0;
+
+    width:260px;
+
+    display:none;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    padding:15px;
+
+    background:#161b22;
+
+    border-radius:18px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
+
+    z-index:100;
+
+}
+
+.subject-menu.show{
+
+    display:flex;
+
+}
+
+.subject-pill{
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    cursor:pointer;
+
+    user-select:none;
+
+    background:#21262d;
+
+    color:white;
+
+    transition:.25s;
+
+}
+
+.subject-pill.active{
+
+    background:#2196F3;
+
+    color:white;
+
+}
+
+.subject-pill:hover{
+
+    transform:scale(1.05);
+
+}
