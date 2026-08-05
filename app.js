@@ -195,59 +195,7 @@ function draw(view){
     });
 
 }
-            if(view==="week"){
-
-                key=record.time.substring(0,10);
-
-            }
-
-            else if(view==="month"){
-
-                key=record.time.substring(0,10);
-
-            }
-
-            else{
-
-                key=date.toLocaleString("default",{month:"short"});
-
-            }
-
-            if(!grouped[key]){
-
-                grouped[key]={};
-
-                SUBJECTS.forEach(s=>grouped[key][s]=0);
-
-            }
-
-            SUBJECTS.forEach(subject=>{
-
-                grouped[key][subject]=Math.max(
-
-                    grouped[key][subject],
-
-                    record[subject]
-
-                );
-
-            });
-
-        });
-
-        labels=Object.keys(grouped);
-
-        labels.forEach(label=>{
-
-            SUBJECTS.forEach(subject=>{
-
-                values[subject].push(grouped[label][subject]);
-
-            });
-
-        });
-
-    }
+    
 
     chart.setOption({
 
