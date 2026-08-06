@@ -1,67 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Student OS Analytics</title>
 
     <link rel="stylesheet" href="style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="header">
+    <header class="header">
 
         <h1>Student Analytics</h1>
-<div class="controls">
 
-    <div class="time-selector">
+        <div class="controls">
 
-        <button class="active">Day</button>
-        <button>Week</button>
-        <button>Month</button>
-        <button>Year</button>
+            <div class="time-selector">
 
-    </div>
+                <button class="active" data-view="day">Day</button>
 
-    <div class="subject-dropdown">
+                <button data-view="week">Week</button>
 
-        <button id="subjectButton">
-            Subjects ▼
-        </button>
+                <button data-view="month">Month</button>
 
-        <div id="subjectMenu" class="subject-menu">
+                <button data-view="year">Year</button>
 
-            <div class="subject-pill active" data-subject="Physics">🔵 Physics</div>
+            </div>
 
-            <div class="subject-pill active" data-subject="Chemistry">🟠 Chemistry</div>
+            <div class="subject-dropdown">
 
-            <div class="subject-pill active" data-subject="HigherMath">🟣 Higher Math</div>
+                <button id="subjectButton">
 
-            <div class="subject-pill active" data-subject="Biology">⚪ Biology</div>
+                    Subjects
 
-            <div class="subject-pill active" data-subject="Bangla">🟢 Bangla</div>
+                    <span id="dropdownArrow">▼</span>
 
-            <div class="subject-pill active" data-subject="English">🔴 English</div>
+                </button>
+
+                <div id="subjectMenu" class="subject-menu">
+
+                    <div class="subject-pill active" data-subject="Physics">
+                        Physics
+                    </div>
+
+                    <div class="subject-pill active" data-subject="Chemistry">
+                        Chemistry
+                    </div>
+
+                    <div class="subject-pill active" data-subject="HigherMath">
+                        Higher Math
+                    </div>
+
+                    <div class="subject-pill active" data-subject="Biology">
+                        Biology
+                    </div>
+
+                    <div class="subject-pill active" data-subject="Bangla">
+                        Bangla
+                    </div>
+
+                    <div class="subject-pill active" data-subject="English">
+                        English
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
-
-</div>
-
-    </div>
+    </header>
 
     <div id="chart"></div>
 
 </div>
 
 <script src="data.js"></script>
+
 <script src="app.js"></script>
 
 </body>
+
 </html>
